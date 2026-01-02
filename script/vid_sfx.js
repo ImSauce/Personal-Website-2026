@@ -1,60 +1,92 @@
 const featuredVideo = document.getElementById("featuredVideo");
-const volumeSlider = document.getElementById("videoVolume");
-const volumeIcon = document.getElementById("volumeIcon");
 
-volumeSlider.addEventListener("input", () => {
-    featuredVideo.volume = volumeSlider.value;
-
-    // update icon
-    if (volumeSlider.value == 0) {
-        volumeIcon.className = "bi bi-volume-mute";
-    } else if (volumeSlider.value < 0.5) {
-        volumeIcon.className = "bi bi-volume-down";
-    } else {
-        volumeIcon.className = "bi bi-volume-up";
-    }
-});
-
-
-const video = document.querySelector(".carousel-slide.featured video");
+// ====================
+// VOLUME CONTROL
+// ====================
 const volumeControl = document.createElement("div");
 volumeControl.classList.add("video-volume-control");
 volumeControl.innerHTML = `
-    <i class="bi bi-volume-up"></i>
-    <input type="range" min="0" max="1" step="0.01" value="1">
+    <i class="bi bi-volume-up" id="volumeIcon"></i>
+    <input type="range" min="0" max="1" step="0.01" value="1" id="videoVolume">
 `;
 document.querySelector(".carousel-slide.featured").appendChild(volumeControl);
 
-const slider = volumeControl.querySelector("input[type='range']");
+const slider = volumeControl.querySelector("#videoVolume");
+const volumeIcon = volumeControl.querySelector("#volumeIcon");
 
-// set initial full volume
-video.volume = 1;
-updateSliderHighlight(1);
+// initial volume
+featuredVideo.volume = parseFloat(slider.value);
 
-// update video volume & CSS highlight
+// function to update the fill highlight
+function updateSliderHighlight(val) {
+    slider.style.setProperty("--volume-percentage", val * 100 + "%");
+}
+
+// sync highlight at start
+updateSliderHighlight(featuredVideo.volume);
+
+// update video volume & icon
 slider.addEventListener("input", (e) => {
     const val = parseFloat(e.target.value);
-    video.volume = val;
+    featuredVideo.volume = val;
     updateSliderHighlight(val);
+
+    if (val == 0) volumeIcon.className = "bi bi-volume-mute";
+    else if (val < 0.5) volumeIcon.className = "bi bi-volume-down";
+    else volumeIcon.className = "bi bi-volume-up";
 });
 
-// highlight fill for Webkit
-function updateSliderHighlight(val) {
-    const perc = val * 100 + "%";
-    slider.style.setProperty("--volume-percentage", perc);
-}
-
-// auto-hide control when idle
-let hideTimeout;
+// auto-hide volume control
+let volumeHideTimeout;
 function showVolumeControl() {
     volumeControl.classList.add("visible");
-    clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(() => {
+    clearTimeout(volumeHideTimeout);
+    volumeHideTimeout = setTimeout(() => {
         volumeControl.classList.remove("visible");
-    }, 2000); // hide after 2s idle
+    }, 1000); // hide after 1s of inactivity
 }
 
-// show on hover or tap
-document.querySelector(".carousel-slide.featured").addEventListener("mousemove", showVolumeControl);
-document.querySelector(".carousel-slide.featured").addEventListener("touchstart", showVolumeControl);
+// show volume on hover/touch
+const videoContainer = document.querySelector(".carousel-slide.featured");
+videoContainer.addEventListener("mousemove", showVolumeControl);
+videoContainer.addEventListener("touchstart", showVolumeControl);
 
+// show initially
+showVolumeControl();
+
+
+// ====================
+// PLAY/PAUSE BUTTON
+// ====================
+const playPauseBtn = document.createElement("div");
+playPauseBtn.classList.add("play-pause-btn");
+playPauseBtn.innerHTML = `<i class="bi bi-pause-fill"></i>`; // default playing
+videoContainer.appendChild(playPauseBtn);
+
+// toggle play/pause on click
+playPauseBtn.addEventListener("click", () => {
+    if (featuredVideo.paused) {
+        featuredVideo.play();
+        playPauseBtn.innerHTML = `<i class="bi bi-pause-fill"></i>`;
+    } else {
+        featuredVideo.pause();
+        playPauseBtn.innerHTML = `<i class="bi bi-play-fill"></i>`;
+    }
+});
+
+// auto-hide play/pause button
+let playHideTimeout;
+function showPlayBtn() {
+    playPauseBtn.classList.add("visible");
+    clearTimeout(playHideTimeout);
+    playHideTimeout = setTimeout(() => {
+        playPauseBtn.classList.remove("visible");
+    }, 1000); // hide after 1s
+}
+
+// show play button on hover/touch
+videoContainer.addEventListener("mousemove", showPlayBtn);
+videoContainer.addEventListener("touchstart", showPlayBtn);
+
+// show initially
+showPlayBtn();

@@ -815,3 +815,39 @@ body {
 .video-volume-control:hover i {
     color: var(--accent-green);
 }
+
+
+
+
+.play-pause-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 20%;
+    cursor: pointer;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.play-pause-btn.visible {
+    opacity: 1;
+}
+
+.play-pause-btn i {
+    font-size: 30px;
+    color: #fff;
+    pointer-events: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.play-pause-btn:hover i {
+    color: var(--accent-green);
+    transform: scale(1.2);
+}
