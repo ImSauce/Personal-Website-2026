@@ -1,0 +1,97 @@
+/* === Fluid / Minimal Dark Carousel === */
+.fluid-carousel {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 16px;
+
+    /* dark glassy bg that matches the site */
+    background: linear-gradient(
+        120deg,
+        rgba(75, 205, 121, 0.05),
+        rgba(33, 40, 48, 0.2),
+        rgba(75, 205, 121, 0.03)
+    );
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(75, 205, 121, 0.2);
+}
+
+/* soft fade edges, subtle dark overlay */
+.fluid-carousel::before,
+.fluid-carousel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 12%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.fluid-carousel::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+.fluid-carousel::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-color), transparent);
+}
+
+/* track */
+.fluid-track {
+    display: flex;
+    width: max-content;
+    height: 100%;
+    cursor: grab;
+    transition: transform 0.3s ease-out;
+}
+
+.fluid-track:active {
+    cursor: grabbing;
+}
+
+/* individual slides */
+.fluid-slide {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 280px;
+    padding: 8px;
+}
+
+.fluid-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+
+    /* subtle vibe */
+    opacity: 0.85;
+    filter: saturate(1.05) contrast(1.05);
+    transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+}
+
+.fluid-slide img:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: saturate(1.15) contrast(1.1);
+}
+
+/* optional slow infinite scroll for vibe */
+@keyframes fluidScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* mobile tweaks */
+@media (max-width: 768px) {
+    .fluid-carousel {
+        height: 220px;
+    }
+
+    .fluid-slide {
+        width: 140px;
+        height: 220px;
+    }
+}
