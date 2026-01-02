@@ -533,3 +533,16 @@ body {
 .download-btn img:hover {
     transform: scale(1.1);
 }
+
+
+
+.witchtype-link {
+    display: block;          /* whole card clickable */
+    text-decoration: none;   /* remove underline */
+    color: inherit;          /* keep text color */
+}
+
+.witchtype-link:hover .game-item {
+    transform: scale(1.02); /* optional hover effect */
+    transition: transform 0.3s ease;
+}
