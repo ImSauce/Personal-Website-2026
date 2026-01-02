@@ -18,6 +18,7 @@
     <!-- Scripts -->
     <script defer src="../script/menu_buttons.js"></script>
     <script defer src="../script/witchtype.js"></script>
+    <script defer src="../script/vid_sfx.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="../css/witchtype.css">
 </head>
@@ -83,11 +84,26 @@
                 <div class="carousel-container">
                     <div class="carousel-track" id="carouselTrack">
                         <div class="carousel-slide featured">
-                            <img src="../images/screenshots/W1.png" alt="WitchType Featured">
+                            <video
+                                id="featuredVideo"
+                                src="../video/witchtype_ad.mp4"
+                                autoplay
+                                loop
+                                playsinline
+                                preload="metadata"
+                                volume="1">
+                            </video>
+
+                            <!-- Volume Control -->
+                            <div class="video-volume-control">
+                                <input type="range" id="videoVolume" min="0" max="1" step="0.01" value="0.5">
+                                <i class="bi bi-volume-up" id="volumeIcon"></i>
+                            </div>
                         </div>
-                        <div class="carousel-slide">
+
+                        <!-- <div class="carousel-slide">
                             <img src="../images/screenshots/W1.png" alt="Screenshot 1">
-                        </div>
+                        </div> -->
                         <div class="carousel-slide">
                             <img src="../images/screenshots/W2.png" alt="Screenshot 2">
                         </div>
@@ -115,7 +131,7 @@
 
                 <div class="thumbnail-strip">
                     <div class="thumbnail active" data-index="0">
-                        <img src="../images/screenshots/W1.png" alt="Thumb 0">
+                        <img src="../images/screenshots/W7.png" alt="Thumb 0">
                     </div>
                     <div class="thumbnail" data-index="1">
                         <img src="../images/screenshots/W1.png" alt="Thumb 1">
@@ -142,12 +158,13 @@
             <section class="game-info">
                 <div class="info-main">
                     <div class="description-box">
+                        <div class="about-image">
+                            <img src="../images/games/Banner1.png" alt="About WitchType">
+                        </div>
+                        <h3>About This Game</h3>
                         <p class="description">
                             WitchType is a 2D top-down pixel game for PC, mixing the action-adventure and keyboard typing mechanics into a fun interactive story based adventure gameplay.
                         </p>
-                    </div>
-
-                    <div class="details-box">
                         <div class="detail-item">
                             <span class="detail-label">Release Date:</span>
                             <span class="detail-value">November 27, 2025</span>
@@ -167,7 +184,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <div class="info-sidebar">
                     <div class="sidebar-card">

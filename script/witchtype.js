@@ -146,33 +146,33 @@ $(document).ready(function() {
         }
     });
 
-    // Auto-play (optional - uncomment to enable)
-    
-    let autoplayInterval;
-    
-    function startAutoplay() {
-        autoplayInterval = setInterval(function() {
+// ============================
+// AUTO-PLAY ONLY FOR NON-FEATURED
+// ============================
+let autoplayInterval;
+
+function startAutoplay() {
+    autoplayInterval = setInterval(function() {
+        // only auto-scroll if NOT on featured (index 0)
+        if (currentIndex !== 0) {
             currentIndex = (currentIndex + 1) % totalSlides;
             updateCarousel();
-        }, 5000);
-    }
-    
-    function stopAutoplay() {
-        clearInterval(autoplayInterval);
-    }
-    
-    startAutoplay();
-    
-    carousel.on('mouseenter', stopAutoplay);
-    carousel.on('mouseleave', startAutoplay);
-    
-    prevBtn.on('click', stopAutoplay);
-    nextBtn.on('click', stopAutoplay);
-    thumbnails.on('click', stopAutoplay);
-    
+        }
+    }, 5000);
+}
 
-    // Initialize
-    updateCarousel(false);
+function stopAutoplay() {
+    clearInterval(autoplayInterval);
+}
+
+startAutoplay();
+
+carousel.on('mouseenter', stopAutoplay);
+carousel.on('mouseleave', startAutoplay);
+
+prevBtn.on('click', stopAutoplay);
+nextBtn.on('click', stopAutoplay);
+thumbnails.on('click', stopAutoplay);
 
     // ============================================
     // SMOOTH SCROLL FOR THUMBNAIL STRIP
