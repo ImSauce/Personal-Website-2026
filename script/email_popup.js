@@ -36,7 +36,7 @@ emailLink.addEventListener("click", (e) => {
                 </div>
                 <button type="submit">Send</button>
 
-                <input type="hidden" name="_next" value="https://imsauce.github.io/Personal-Website-2026/html/contacts.html">
+                <input type="hidden" name="_next" value="https://imsauce.github.io/Personal-Website-2026/index.html">
 
 
                 
