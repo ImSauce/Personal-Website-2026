@@ -15,16 +15,30 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <!-- Howler SFX JS -->
+    <script src="https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"></script>
     <!-- Home CSS -->
     <link rel="stylesheet" href="css/home.css">
     <!-- Loader CSS -->
     <link rel="stylesheet" href="css/loader.css">
     <!-- Scripts -->
-    <script defer src="script/loader.js" dedfer></script>
-    <script defer src="script/home.js" defer></script>
+    <script defer src="script/loader.js"></script>
+    <script defer src="script/sfx.js"></script>
 </head>
 
 <body>
+
+    
+    <!-- Header Icons -->
+    <div class="header-icons">
+        <button class="icon-btn" aria-label="Toggle theme">
+            <i class="bi bi-sun"></i>
+        </button>
+        <button class="icon-btn" aria-label="Sound">
+            <i class="bi bi-volume-up"></i>
+        </button>
+    </div>
+
 
     <div class="loader_wrapper preload">
         <svg class="wave wave-loader" viewBox="0 0 2 1" preserveAspectRatio="none">
@@ -73,13 +87,3 @@
 
 
 
-
-    <!-- Header Icons -->
-    <!-- <div class="header-icons">
-        <button class="icon-btn" aria-label="Toggle theme">
-            <i class="bi bi-sun"></i>
-        </button>
-        <button class="icon-btn" aria-label="Sound">
-            <i class="bi bi-volume-up"></i>
-        </button>
-    </div> -->
