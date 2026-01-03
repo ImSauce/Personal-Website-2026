@@ -356,8 +356,9 @@ body {
 
 .thumbnail.active {
     opacity: 1;
-    border-color: var(--accent-green);
-    box-shadow: 0 0 10px rgba(75, 205, 121, 0.5);
+    border-color: transparent; /* hide the border */
+    outline: 2px solid var(--accent-green);
+
 }
 
 .thumbnail img {
@@ -623,17 +624,22 @@ body {
 /* ================================
    Thumbnail strip (HORIZONTAL ONLY)
 ================================ */
+
+/* wrapper around the strip */
+.steam-layout .thumbnail-strip-wrapper {
+    position: relative; /* container for fade overlay */
+}
+
+
+/* strip itself */
 .steam-layout .thumbnail-strip {
     display: flex;
     gap: 12px;
     margin-top: 12px;
-
-    max-width: calc(150px * 5 + 12px * 3); /* show 4 thumbs */
+    max-width: calc(150px * 5 + 12px * 3);
     overflow-x: auto;
     overflow-y: hidden;
-
-    padding-bottom: 6px;
-    position: relative;
+     padding: 10px 0px 6px 5px; /* left 10px, right 10px spacing */
 }
 
 /* scrollbar */
@@ -655,18 +661,19 @@ body {
     flex: 0 0 150px;
     height: 90px;
 }
-
 /* Steam-style fade edge */
-.steam-layout .thumbnail-strip::after {
+.steam-layout .thumbnail-strip-wrapper::after {
     content: "";
     position: absolute;
-    right: 0;
     top: 0;
+    right: 0;
     width: 30px;
     height: 100%;
     pointer-events: none;
-    background: linear-gradient(to left, var(--bg-color), transparent);
+    background: linear-gradient(to left, var(--bg-color) 10%, transparent 100%);
+    z-index: 5;
 }
+
 
 /* ================================
    Mobile tweak

@@ -7,11 +7,22 @@ $(document).ready(function() {
     const thumbnails = $('.thumbnail');
     const prevBtn = $('#prevBtn');
     const nextBtn = $('#nextBtn');
+    const carousel = $('.carousel-container');
     
     let currentIndex = 0;
     let isAnimating = false;
     const totalSlides = slides.length;
+    let prevTranslate = 0;
+    let currentTranslate = 0;
+    let isDragging = false;
+    let startX = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let carouselDisabled = false; // disable interactions when featured is clicked
 
+    // ============================================
+    // UPDATE CAROUSEL POSITION
+    // ============================================
     function updateCarousel(animate = true) {
         if (isAnimating) return;
 
@@ -34,23 +45,39 @@ $(document).ready(function() {
         thumbnails.removeClass('active');
         thumbnails.eq(currentIndex).addClass('active');
 
-        // Update prevTranslate so dragging logic stays in sync
+        // Sync drag logic
         prevTranslate = offset;
     }
 
+    // ============================================
+    // FEATURED SLIDE CLICK DISABLE
+    // ============================================
+    const featuredSlide = $('.carousel-slide.featured');
+    featuredSlide.on('click', function(e) {
+        e.stopPropagation(); // stop bubbling
+        carouselDisabled = true;
 
-    // Previous slide
-    prevBtn.on('click', function() {
-        if (isAnimating) return;
-        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-        updateCarousel();
+        // Optional: auto re-enable after 3s
+        setTimeout(() => {
+            carouselDisabled = false;
+        }, 3000);
     });
 
-    // Next slide
+    // ============================================
+    // NAVIGATION BUTTONS
+    // ============================================
+    prevBtn.on('click', function() {
+        if (isAnimating || (carouselDisabled && currentIndex === 0)) return;
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+        stopAutoplay();
+    });
+
     nextBtn.on('click', function() {
-        if (isAnimating) return;
+        if (isAnimating || (carouselDisabled && currentIndex === 0)) return;
         currentIndex = (currentIndex + 1) % totalSlides;
         updateCarousel();
+        stopAutoplay();
     });
 
     // Thumbnail click
@@ -58,22 +85,18 @@ $(document).ready(function() {
         if (isAnimating) return;
         currentIndex = parseInt($(this).data('index'));
         updateCarousel();
+        stopAutoplay();
     });
 
     // Keyboard navigation
     $(document).on('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            prevBtn.click();
-        } else if (e.key === 'ArrowRight') {
-            nextBtn.click();
-        }
+        if (e.key === 'ArrowLeft') prevBtn.click();
+        else if (e.key === 'ArrowRight') nextBtn.click();
     });
 
-    // Touch/Swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const carousel = $('.carousel-container');
-
+    // ============================================
+    // TOUCH / SWIPE SUPPORT
+    // ============================================
     carousel.on('touchstart', function(e) {
         touchStartX = e.touches[0].clientX;
     });
@@ -87,21 +110,16 @@ $(document).ready(function() {
         const diff = touchStartX - touchEndX;
 
         if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                nextBtn.click(); // Swipe left - next slide
-            } else {
-                prevBtn.click(); // Swipe right - previous slide
-            }
+            if (diff > 0) nextBtn.click();
+            else prevBtn.click();
         }
     });
 
-    // Mouse drag support
-    let isDragging = false;
-    let startX = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-
+    // ============================================
+    // MOUSE DRAG SUPPORT
+    // ============================================
     carousel.on('mousedown', function(e) {
+        if (carouselDisabled && currentIndex === 0) return;
         isDragging = true;
         startX = e.pageX;
         carousel.css('cursor', 'grabbing');
@@ -111,15 +129,13 @@ $(document).ready(function() {
     carousel.on('mousemove', function(e) {
         if (!isDragging) return;
         e.preventDefault();
-        
         const currentX = e.pageX;
         const diff = currentX - startX;
         currentTranslate = prevTranslate + diff;
-        
         track.css('transform', `translateX(${currentTranslate}px)`);
     });
 
-    carousel.on('mouseup mouseleave', function(e) {
+    carousel.on('mouseup mouseleave', function() {
         if (!isDragging) return;
         isDragging = false;
         carousel.css('cursor', 'grab');
@@ -128,76 +144,55 @@ $(document).ready(function() {
         const threshold = carousel.width() * 0.2;
 
         if (Math.abs(movedBy) > threshold) {
-            if (movedBy < 0) {
-                currentIndex = (currentIndex + 1) % totalSlides;
-            } else {
-                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-            }
+            if (movedBy < 0) currentIndex = (currentIndex + 1) % totalSlides;
+            else currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
         }
 
         updateCarousel();
     });
 
-    carousel.on('mouseleave', function() {
-        if (isDragging) {
-            isDragging = false;
-            carousel.css('cursor', 'grab');
-            updateCarousel();
-        }
-    });
+    // ============================================
+    // AUTO-PLAY (SKIP FEATURED)
+    // ============================================
+    let autoplayInterval;
 
-// ============================
-// AUTO-PLAY ONLY FOR NON-FEATURED
-// ============================
-let autoplayInterval;
+    function startAutoplay() {
+        autoplayInterval = setInterval(function() {
+            if (currentIndex !== 0) {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateCarousel();
+            }
+        }, 5000);
+    }
 
-function startAutoplay() {
-    autoplayInterval = setInterval(function() {
-        // only auto-scroll if NOT on featured (index 0)
-        if (currentIndex !== 0) {
-            currentIndex = (currentIndex + 1) % totalSlides;
-            updateCarousel();
-        }
-    }, 5000);
-}
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
 
-function stopAutoplay() {
-    clearInterval(autoplayInterval);
-}
-
-startAutoplay();
-
-carousel.on('mouseenter', stopAutoplay);
-carousel.on('mouseleave', startAutoplay);
-
-prevBtn.on('click', stopAutoplay);
-nextBtn.on('click', stopAutoplay);
-thumbnails.on('click', stopAutoplay);
+    startAutoplay();
+    carousel.on('mouseenter', stopAutoplay);
+    carousel.on('mouseleave', startAutoplay);
 
     // ============================================
-    // SMOOTH SCROLL FOR THUMBNAIL STRIP
+    // THUMBNAIL STRIP SMOOTH SCROLL
     // ============================================
     const thumbnailStrip = $('.thumbnail-strip');
-    
     thumbnails.on('click', function() {
         const thumbnail = $(this);
         const stripWidth = thumbnailStrip.width();
         const thumbLeft = thumbnail.position().left;
         const thumbWidth = thumbnail.outerWidth();
         const currentScroll = thumbnailStrip.scrollLeft();
-        
+
         const targetScroll = currentScroll + thumbLeft - (stripWidth / 2) + (thumbWidth / 2);
-        
-        thumbnailStrip.animate({
-            scrollLeft: targetScroll
-        }, 300);
+
+        thumbnailStrip.animate({ scrollLeft: targetScroll }, 300);
     });
 
     // ============================================
-    // LAZY LOADING FOR IMAGES
+    // LAZY LOADING IMAGES
     // ============================================
     const lazyImages = $('img[loading="lazy"]');
-    
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
@@ -208,10 +203,7 @@ thumbnails.on('click', stopAutoplay);
                 }
             });
         });
-        
-        lazyImages.each(function() {
-            imageObserver.observe(this);
-        });
+        lazyImages.each(function() { imageObserver.observe(this); });
     }
 
     // ============================================
@@ -230,60 +222,20 @@ thumbnails.on('click', stopAutoplay);
     // DOWNLOAD BUTTON ANIMATION
     // ============================================
     const downloadBtn = $('.download-btn');
-    
     downloadBtn.on('click', function(e) {
         e.preventDefault();
-        
         const ripple = $('<span class="ripple"></span>');
         $(this).append(ripple);
-        
-        setTimeout(function() {
-            ripple.remove();
-        }, 600);
-        
+        setTimeout(() => ripple.remove(), 600);
         console.log('Download initiated for WitchType');
-        // window.location.href = 'path/to/your/game/file.zip';
     });
 
     // ============================================
     // PAUSE CAROUSEL ON TAB VISIBILITY CHANGE
     // ============================================
     document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            track.css('transition', 'none');
-        } else {
-            track.css('transition', 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)');
-        }
+        if (document.hidden) track.css('transition', 'none');
+        else track.css('transition', 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)');
     });
 });
 
-
-
-
-
-
-
-
-
-function fixMobileOrder() {
-    const description = $('.-extra-info-main');
-
-    if ($(window).width() <= 992) {
-        // Move description AFTER About, BEFORE System (mobile)
-        if (!description.parent().hasClass('game-info')) {
-            $('.info-sidebar').before(description);
-        }
-    } else {
-        // Move description BACK to original parent (desktop)
-        const originalParent = $('.media-carousel');
-        if (!description.parent().is(originalParent)) {
-            originalParent.append(description);
-        }
-    }
-}
-
-// Run on page load
-fixMobileOrder();
-
-// Run on resize
-$(window).on('resize', fixMobileOrder);
