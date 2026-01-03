@@ -1,7 +1,7 @@
 
         @font-face {
           font-family: "MPLUS";
-          src: url("MPLUSRounded1c-ExtraBold.ttf") format("truetype");
+          src: url("/MPLUSRounded1c-ExtraBold.ttf") format("truetype");
           font-weight: 400;
           font-style: normal;
         }
