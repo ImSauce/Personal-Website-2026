@@ -77,12 +77,12 @@
         }
 
         .title .name {
-            font-family: "MPLUS", sans-serif;
+            font-family: 'MPLUS';
             color: var(--accent-green);
         }
 
         .subtitle {
-          font-family: "MPLUS", sans-serif;
+          font-family: 'MPLUS';
             font-size: clamp(1.2rem, 3vw, 1.8rem);
             font-weight: 300;
             margin-bottom: 50px;
