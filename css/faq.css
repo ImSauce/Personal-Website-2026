@@ -371,3 +371,36 @@
                 font-size: 0.95rem;
             }
         }
+
+       /* ============================= */
+        /* Scrollbar – modern slick */
+        /* ============================= */
+
+        /* Required base */
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        /* Track */
+        *::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        /* Thumb */
+        *::-webkit-scrollbar-thumb {
+            background: rgba(75,205,121,0.25);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        /* Hover glow */
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(75,205,121,0.9);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(75,205,121,0.6) rgba(255,255,255,0.05);
+        }
