@@ -478,3 +478,35 @@
         *::-webkit-scrollbar-thumb:hover {
             background: rgba(75,205,121,0.9);
         }
+
+
+
+
+        #flashbang {
+            position: fixed;
+            inset: 0;
+            background: black;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        #flashbang img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: flashFade 1s ease forwards;
+        }
+
+        /* flashbang fade */
+        @keyframes flashFade {
+            0% {
+                opacity: 1;
+                filter: brightness(2);
+            }
+            100% {
+                opacity: 0;
+                filter: brightness(1);
+            }
+        }

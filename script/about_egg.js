@@ -1,3 +1,5 @@
+let visible = false;
+
 document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("toggle-anime");
     const easterItems = document.querySelectorAll(".easter-item");
@@ -11,8 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
         item.style.display = "none";
         item.style.opacity = "0";
     });
-
-    let visible = false;
 
     toggle.addEventListener("click", () => {
         // play sfx
@@ -32,5 +32,49 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 550);
             }
         });
+    });
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("toggle-anime");
+    let hasFlashed = false;
+
+    toggle.addEventListener("click", () => {
+        // only trigger when OPENING (not closing)
+        if (hasFlashed) return;
+
+        hasFlashed = true;
+
+        const flash = document.createElement("div");
+        flash.style.position = "fixed";
+        flash.style.top = "0";
+        flash.style.left = "0";
+        flash.style.width = "100vw";
+        flash.style.height = "100vh";
+        flash.style.background = `url("../images/momoi.gif") center / cover no-repeat`;
+        flash.style.zIndex = "9999";
+        flash.style.opacity = "1";
+        flash.style.transition = "opacity 0.3s ease";
+
+        document.body.appendChild(flash);
+
+        setTimeout(() => {
+            flash.style.opacity = "0";
+        }, 700);
+
+        setTimeout(() => {
+            flash.remove();
+        }, 1000);
+    });
+
+    //reset flash ability when easter item is hidden again
+    document.addEventListener("click", (e) => {
+        if (e.target.id === "toggle-anime" && !visible) {
+            setTimeout(() => {
+                hasFlashed = false;
+            }, 600);
+        }
     });
 });
