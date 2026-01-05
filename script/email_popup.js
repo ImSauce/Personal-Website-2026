@@ -55,11 +55,19 @@ emailLink.addEventListener("click", (e) => {
             });
         });
 
-        // Character counter for textarea (MUST be inside modal creation)
+        // Character counter for textarea
         const textarea = formWrapper.querySelector("textarea[name='message']");
-        const counter = formWrapper.querySelector(".char-counter");
-        const maxChars = textarea.getAttribute("maxlength") || 500;
+        let counter = formWrapper.querySelector(".char-counter");
 
+        // if somehow counter isn't found, create it dynamically
+        if (!counter) {
+            counter = document.createElement("div");
+            counter.className = "char-counter";
+            counter.textContent = `0/${textarea.getAttribute("maxlength") || 500} characters`;
+            textarea.parentNode.appendChild(counter);
+        }
+
+        const maxChars = textarea.getAttribute("maxlength") || 500;
         textarea.addEventListener("input", () => {
             const letters = textarea.value.length;
             counter.textContent = `${letters}/${maxChars} characters`;
