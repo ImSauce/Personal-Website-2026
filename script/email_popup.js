@@ -14,7 +14,7 @@ emailLink.addEventListener("click", (e) => {
 
         formWrapper.innerHTML = `
             <h2>Send me a message! 🐢</h2>
-            <form id="contactForm" action="https://formsubmit.co/samueljamescinco@gmail.com" method="POST">
+            <form id="contactForm" action="https://formsubmit.co/d48f74fa46b6a08789394d79e5f6555d" method="POST">
                 <input type="hidden" name="_subject" value="New message from ur personal website!">
 
                 <input type="hidden" name="_template" value="table">
