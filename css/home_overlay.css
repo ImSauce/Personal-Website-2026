@@ -1,0 +1,47 @@
+#click-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(33, 40, 48, 0); /* slightly dark overlay */
+    display: flex;
+    flex-direction: column;      /* stack children vertically */
+    justify-content: center;     /* center vertically */
+    align-items: center;         /* center horizontally */
+    font-family: "MPLUS", sans-serif;
+    color: var(--accent-green);
+    cursor: pointer;
+    text-shadow: 0 0 15px rgba(75, 205, 121, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease, transform 0.5s ease;
+    z-index: 9999;
+}
+
+/* Slight scale hover effect */
+#click-overlay:hover {
+    transform: scale(1.05);
+}
+
+/* Make image big and responsive */
+#click-overlay img {
+    width: clamp(150px, 30vw, 300px); /* scales from 150px to 300px */
+    height: auto;
+    border-radius: 50%;  /* circular profile pic */
+    margin-bottom: 2rem;
+    box-shadow: 0 0 30px rgba(75, 205, 121, 0.5);
+}
+
+/* Text under the image */
+#click-overlay p {
+    margin: 0;
+    font-size: clamp(1rem, 2vw, 1.2rem); /* responsive size */
+    animation: slowFlicker 2s ease-in-out infinite; /* slow fade */
+}
+
+@keyframes slowFlicker {
+    0%   { opacity: 0.4; text-shadow: 0 0 5px rgba(75, 205, 121, 0.3); }
+    50%  { opacity: 1;   text-shadow: 0 0 20px rgba(75, 205, 121, 0.8); }
+    100% { opacity: 0.4; text-shadow: 0 0 5px rgba(75, 205, 121, 0.3); }
+}

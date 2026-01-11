@@ -17,16 +17,28 @@
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <!-- Home CSS -->
     <link rel="stylesheet" href="css/home.css">
-    <!-- Loader CSS -->
     <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/home_overlay.css">
     <!-- Scripts -->
     <script defer src="script/loader.js"></script>
+    <script defer src="script/bgm.js"></script>
 </head>
 
 <body>
 
     <!-- sdkldsaj;lfasl;dkjf i cant separate this because of that fcking font not working on github hosting if its inside a file!! -->
     <style>
+
+        .page-exit-animation {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .main-content {
+            opacity: 0;           /* hidden initially */
+            transition: opacity 1s ease;
+        }
+
         @font-face {
           font-family: "MPLUS";
           src: url("Fonts/MPLUSRounded1c-ExtraBold.ttf") format("truetype");
@@ -185,6 +197,54 @@
             <use href="#w" y=".2" fill="#94FF7C" />
         </g>
     </svg>
+
+
+
+    <!-- fade out animation -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const navButtons = document.querySelectorAll(".nav-buttons a");
+
+        function fadeOutAudio(audio, duration = 1000) {
+            const stepTime = 50;
+            const steps = duration / stepTime;
+            const volumeStep = audio.volume / steps;
+
+            const fadeInterval = setInterval(() => {
+                if (audio.volume > 0) {
+                    audio.volume = Math.max(audio.volume - volumeStep, 0);
+                } else {
+                    clearInterval(fadeInterval);
+                    audio.pause(); // stop it after fade out
+                }
+            }, stepTime);
+        }
+
+        navButtons.forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault(); // stop immediate navigation
+
+                // Start fade out animation for page
+                document.body.classList.add("page-exit-animation");
+
+                // Start fade out for music
+                fadeOutAudio(bgMusic, 500);
+
+                // Redirect after animation duration
+                setTimeout(() => {
+                    window.location.href = link.href;
+                }, 1500);
+            });
+        });
+    });
+    </script>
+
+
+    <!-- Click to Continue Overlay -->
+    <div id="click-overlay" class="d-flex flex-column justify-content-center align-items-center text-center">
+        <img src="../images/about_pfp.jpg" alt="Sam Profile Picture" class="img-fluid rounded-circle mb-3" />
+        <p>click anywhere to continue</p>
+    </div>
 
 
 
